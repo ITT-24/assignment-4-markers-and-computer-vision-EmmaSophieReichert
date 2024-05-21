@@ -2,6 +2,10 @@ import pyglet
 import sprite_getter
 import random
 import time
+from opencv_pyglet import cv2glet
+import cv2
+import sys
+import game_rectangle as gr
 
 add_object_time = 10
 
@@ -13,6 +17,11 @@ window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
 WIDTH_SHIFT = 50
 
 falling_objects = []
+
+video_id = 0
+
+if len(sys.argv) > 1:
+    video_id = int(sys.argv[1])
 
 class Falling_Object:
     def __init__(self, type, position) -> None:
@@ -51,19 +60,26 @@ add_new_falling_object(None, WINDOW_WIDTH * 0.75)
 time.sleep(2)
 add_new_falling_object(None, WINDOW_WIDTH * 0.5)
 
+# Create a video capture object for the webcam
+cap = cv2.VideoCapture(video_id)
 
 @window.event
 def on_draw():
     global falling_objects
     window.clear()
+    #ret, frame = cap.read()
+    #img = cv2glet(frame, 'BGR')
+    #img.blit(0, 0, 0)
+    img = gr.get_game_rectangle(cap)
+    img = cv2glet(img, 'BGR')
+    img.blit(0, 0, 0)
+
     falling_objects_new = []
     for obj in falling_objects:
         obj.draw()
         if(obj.sprite.y > 0): #obj still visible
             falling_objects_new.append(obj)
     falling_objects = falling_objects_new #invisible objects are now deleted for better performance
-    #ret, frame = cap.read()
-    #img = cv2glet(frame, 'BGR')
-    #img.blit(0, 0, 0)
+    
 
 pyglet.app.run()

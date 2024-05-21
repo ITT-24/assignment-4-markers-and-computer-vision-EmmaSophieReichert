@@ -1,3 +1,4 @@
+# I changed this file to match my needs
 import cv2
 import numpy as np
 import pyglet
@@ -19,6 +20,9 @@ def cv2glet(img,fmt):
     else:
       rows, cols, channels = img.shape
 
+    #little adjustment here: mirrow the image to make it easier to play
+    img = cv2.flip(img, 1)
+
     raw_img = Image.fromarray(img).tobytes()
 
     top_to_bottom_flag = -1
@@ -30,19 +34,20 @@ def cv2glet(img,fmt):
                                    pitch=top_to_bottom_flag*bytes_per_row)
     return pyimg
 
-# Create a video capture object for the webcam
-cap = cv2.VideoCapture(video_id)
+if __name__ == "__main__": #only run when running whole module
+    # Create a video capture object for the webcam
+    cap = cv2.VideoCapture(video_id)
 
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
+    WINDOW_WIDTH = 640
+    WINDOW_HEIGHT = 480
 
-window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
+    window = pyglet.window.Window(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-@window.event
-def on_draw():
-    window.clear()
-    ret, frame = cap.read()
-    img = cv2glet(frame, 'BGR')
-    img.blit(0, 0, 0)
+    @window.event
+    def on_draw():
+        window.clear()
+        ret, frame = cap.read()
+        img = cv2glet(frame, 'BGR')
+        img.blit(0, 0, 0)
 
-pyglet.app.run()
+    pyglet.app.run()
