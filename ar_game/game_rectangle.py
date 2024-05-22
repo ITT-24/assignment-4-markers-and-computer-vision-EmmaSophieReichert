@@ -19,16 +19,16 @@ def order_points(corners, ids) -> list:
     global left_upper, right_upper, right_down, left_down
     for i in range(0, len(ids)):
         if(ids[i][0] == 0):
-            left_upper = corners[i][0][0]
+            left_upper = corners[i][0][2] #get inner corners
         elif(ids[i][0] == 1):
-            right_upper = corners[i][0][0]
+            right_upper = corners[i][0][3]
         elif(ids[i][0] == 2):
             right_down = corners[i][0][0]
         elif(ids[i][0] == 3):
-            left_down = corners[i][0][0] 
-    return(left_upper, right_upper, left_down, right_down)    
+            left_down = corners[i][0][1] 
+    return [left_upper, right_upper, left_down, right_down]  
 
-def get_wrapped_result(corners, frame):
+def get_wrapped_result(corners, frame) -> list:
     height, width, _ = frame.shape #looked this up in Luca Eschers solution
     pts1 = np.float32(corners)
     pts2 = np.float32([[0,0],[width,0],[0,height],[width,height]])
@@ -39,7 +39,7 @@ def get_wrapped_result(corners, frame):
 
 current_corners = []
 
-def get_game_rectangle(cap):
+def get_game_rectangle(cap) -> tuple[list, bool]:
     global current_corners
     ret, frame = cap.read()
     # Convert the frame to grayscale
@@ -56,6 +56,6 @@ def get_game_rectangle(cap):
         if len(corners) == 4 and len(ids) == 4: #all four markers detected
             current_corners = order_points(corners, ids) #store the positions of the markers against flickering and order them
         if len(current_corners) == 4: # all four markers are stored before
-            return get_wrapped_result(current_corners, frame)
+            return get_wrapped_result(current_corners, frame), True
         
-    return frame
+    return frame, False

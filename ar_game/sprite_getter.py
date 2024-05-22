@@ -19,6 +19,8 @@ leaf_counter = 0
 
 SPRITE_SIZE = 50
 
+END_COUNT = 100 #adjust this, if you want the game to end earlier
+
 def get_sprite(picture_path):
     img = pyglet.image.load(picture_path)
     img.anchor_x = img.width // 2 #set anchor to middle of the img
@@ -44,3 +46,13 @@ def get_leaf() -> str:
     leaf_counter += 1
     leaf = random.choice(current_leafs)
     return get_sprite(os.path.join(LEAF_FOLDER_NAME, leaf + ENDING))
+
+def is_end() -> bool:
+    return fruit_counter >= END_COUNT
+
+def reset() -> None:
+    global current_fruits, current_leafs, fruit_counter, leaf_counter
+    current_fruits = []
+    current_leafs = []
+    fruit_counter = 0
+    leaf_counter = 0
