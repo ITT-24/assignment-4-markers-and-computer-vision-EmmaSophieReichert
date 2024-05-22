@@ -9,8 +9,14 @@ aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_250)
 aruco_params = aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, aruco_params)
 
+left_upper = None
+right_upper = None
+right_down = None
+left_down = None
+
 # used GPT for this method - stores selected points in the right order
 def order_points(corners, ids) -> list:
+    global left_upper, right_upper, right_down, left_down
     for i in range(0, len(ids)):
         if(ids[i][0] == 0):
             left_upper = corners[i][0][0]
