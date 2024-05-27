@@ -19,7 +19,7 @@ leaf_counter = 0
 
 SPRITE_SIZE = 50
 
-END_COUNT = 100 #adjust this, if you want the game to end earlier
+END_COUNT = 10 #adjust this, if you want the game to end earlier
 
 def get_sprite(picture_path):
     img = pyglet.image.load(picture_path)
